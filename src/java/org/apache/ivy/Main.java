@@ -37,6 +37,7 @@ import java.util.StringTokenizer;
 
 import org.apache.ivy.core.cache.ResolutionCacheManager;
 import org.apache.ivy.core.deliver.DeliverOptions;
+import org.apache.ivy.core.module.descriptor.Artifact;
 import org.apache.ivy.core.module.descriptor.DefaultDependencyDescriptor;
 import org.apache.ivy.core.module.descriptor.DefaultModuleDescriptor;
 import org.apache.ivy.core.module.descriptor.ModuleDescriptor;
@@ -341,6 +342,8 @@ public final class Main {
                 line.getOptionValue("cachepath", "ivycachepath.txt"));
         }
 
+        Collection<Artifact> publishedArtifacts = null;
+
         if (line.hasOption("revision")) {
             ivy.deliver(
                 md.getResolvedModuleRevisionId(),
@@ -350,7 +353,7 @@ public final class Main {
                         .setStatus(settings.substitute(line.getOptionValue("status", "release")))
                         .setValidate(validate));
             if (line.hasOption("publish")) {
-                ivy.publish(
+                publishedArtifacts = ivy.publish(
                     md.getResolvedModuleRevisionId(),
                     Collections.singleton(settings.substitute(line.getOptionValue("publishpattern",
                         "distrib/[type]s/[artifact]-[revision].[ext]"))),
@@ -364,6 +367,11 @@ public final class Main {
                             .setOverwrite(line.hasOption("overwrite")));
             }
         }
+
+        for (Artifact artifact : publishedArtifacts) {
+            System.out.println("Blabla " + artifact.getUrl());
+        }
+
         if (line.hasOption("main")) {
             // check if the option cp has been set
             List fileList = getExtraClasspathFileList(line);
