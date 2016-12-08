@@ -63,6 +63,8 @@ public class PublishOptions {
 
     private boolean warnonmissing;
 
+    private boolean dumpToFile;
+
     public String[] getConfs() {
         return confs;
     }
@@ -180,4 +182,10 @@ public class PublishOptions {
         return this;
     }
 
+    public boolean isDumpToFile() { return dumpToFile; }
+
+    public PublishOptions setDumpToFile(boolean dumpToFile) {
+        this.dumpToFile = dumpToFile;
+        return this;
+    }
 }

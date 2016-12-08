@@ -168,6 +168,9 @@ public final class Main {
                 .addOption(
                     new OptionBuilder("overwrite").description(
                         "overwrite files in the repository if they exist").create())
+                .addOption(
+                    new OptionBuilder("dumptofile").description(
+                        "dumps published artifacts to file").create())
 
                 .addCategory("http auth options")
                 .addOption(
@@ -342,7 +345,6 @@ public final class Main {
                 line.getOptionValue("cachepath", "ivycachepath.txt"));
         }
 
-        Collection<Artifact> publishedArtifacts = null;
 
         if (line.hasOption("revision")) {
             ivy.deliver(
@@ -353,7 +355,7 @@ public final class Main {
                         .setStatus(settings.substitute(line.getOptionValue("status", "release")))
                         .setValidate(validate));
             if (line.hasOption("publish")) {
-                publishedArtifacts = ivy.publish(
+                ivy.publish(
                     md.getResolvedModuleRevisionId(),
                     Collections.singleton(settings.substitute(line.getOptionValue("publishpattern",
                         "distrib/[type]s/[artifact]-[revision].[ext]"))),
@@ -364,12 +366,9 @@ public final class Main {
                             .setSrcIvyPattern(
                                 settings.substitute(line.getOptionValue("deliverto",
                                     "ivy-[revision].xml")))
-                            .setOverwrite(line.hasOption("overwrite")));
+                            .setOverwrite(line.hasOption("overwrite"))
+                            .setDumpToFile(line.hasOption("dumptofile")));
             }
-        }
-
-        for (Artifact artifact : publishedArtifacts) {
-            System.out.println("Blabla " + artifact.getUrl());
         }
 
         if (line.hasOption("main")) {
