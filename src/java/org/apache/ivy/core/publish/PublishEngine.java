@@ -262,8 +262,7 @@ public class PublishEngine {
                 resolver.abortPublishTransaction();
             }
             if (options.isDumpToFile()) {
-                System.out.println(":: will dump to the file! :: " + options.isDumpToFile());
-                Message.debug("Dumped artifacts: " + artifactsFiles.entrySet().toString());
+                Message.info("Dump artifacts: " + artifactsFiles.entrySet().toString());
             }
         }
         return missing;
