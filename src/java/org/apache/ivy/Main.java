@@ -343,7 +343,6 @@ public final class Main {
         }
 
         Collection<Artifact> publishedArtifacts = null;
-        System.out.println("0 ***********************************************");
 
         if (line.hasOption("revision")) {
             ivy.deliver(
@@ -354,7 +353,6 @@ public final class Main {
                         .setStatus(settings.substitute(line.getOptionValue("status", "release")))
                         .setValidate(validate));
             if (line.hasOption("publish")) {
-                System.out.println("1 ***********************************************");
                 publishedArtifacts = ivy.publish(
                     md.getResolvedModuleRevisionId(),
                     Collections.singleton(settings.substitute(line.getOptionValue("publishpattern",
@@ -370,11 +368,9 @@ public final class Main {
             }
         }
 
-        System.out.println("Size: " + publishedArtifacts.size());
         for (Artifact artifact : publishedArtifacts) {
-            System.out.println("Published artifact: " + artifact.getUrl());
+            System.out.println("Blabla " + artifact.getUrl());
         }
-        System.out.println("3 ***********************************************");
 
         if (line.hasOption("main")) {
             // check if the option cp has been set
