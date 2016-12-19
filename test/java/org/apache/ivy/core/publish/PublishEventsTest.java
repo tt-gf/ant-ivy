@@ -454,7 +454,7 @@ public class PublishEventsTest extends TestCase {
      */
     public static class InstrumentedResolver extends MockResolver {
 
-        public void publish(Artifact artifact, File src, boolean overwrite) throws IOException {
+        public String publish(Artifact artifact, File src, boolean overwrite) throws IOException {
 
             // verify that the data from the current test case has been handed down to us
             PublishEventsTest test = (PublishEventsTest) IvyContext.getContext().peek(
@@ -484,6 +484,8 @@ public class PublishEventsTest extends TestCase {
             // all assertions pass. increment the publication count
             test.currentTestCase.published = true;
             ++test.publications;
+            
+            return null;
         }
     }
 

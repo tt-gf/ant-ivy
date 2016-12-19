@@ -63,7 +63,9 @@ public class PublishOptions {
 
     private boolean warnonmissing;
 
-    private boolean dumpToFile;
+    private boolean exportDestination;
+    
+    private String exportDestinationFilename;
 
     public String[] getConfs() {
         return confs;
@@ -182,10 +184,13 @@ public class PublishOptions {
         return this;
     }
 
-    public boolean isDumpToFile() { return dumpToFile; }
+    public boolean isExportDestination() { return exportDestination; }
+    
+    public String getExportDestinationFilename() { return exportDestinationFilename; }
 
-    public PublishOptions setDumpToFile(boolean dumpToFile) {
-        this.dumpToFile = dumpToFile;
+    public PublishOptions setExportDestination(boolean exportDestination, String filename) {
+        this.exportDestination = exportDestination;
+        this.exportDestinationFilename = filename;
         return this;
     }
 }

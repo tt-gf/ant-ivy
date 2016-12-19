@@ -544,7 +544,7 @@ public abstract class AbstractOSGiResolver extends BasicResolver {
         return getRepository().getResource(source);
     }
 
-    public void publish(Artifact artifact, File src, boolean overwrite) throws IOException {
+    public String publish(Artifact artifact, File src, boolean overwrite) throws IOException {
         throw new UnsupportedOperationException();
     }
 

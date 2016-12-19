@@ -20,14 +20,13 @@ package org.apache.ivy.plugins.resolver;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.ivy.core.IvyPatternHelper;
 import org.apache.ivy.core.event.EventManager;
@@ -198,7 +197,7 @@ public class RepositoryResolver extends AbstractPatternsBasedResolver {
         return dest.length();
     }
 
-    public void publish(Artifact artifact, File src, boolean overwrite) throws IOException {
+    public String publish(Artifact artifact, File src, boolean overwrite) throws IOException {
         String destPattern;
         if ("ivy".equals(artifact.getType()) && !getIvyPatterns().isEmpty()) {
             destPattern = getIvyPatterns().get(0);
@@ -217,18 +216,10 @@ public class RepositoryResolver extends AbstractPatternsBasedResolver {
         String dest = getDestination(destPattern, artifact, mrid);
 
         put(artifact, src, dest, overwrite);
-        String exportedToURL = hidePassword(repository.standardize(dest));
+        String destination = hidePassword(repository.standardize(dest));
         Message.info("\tpublished " + artifact.getName() + " to "
-                + exportedToURL);
-        try {
-            File tempDumpFile = new File("/tmp/ivy_published_artifacts.txt");
-            tempDumpFile.createNewFile();
-            Path pathToDump = Paths.get(tempDumpFile.getAbsolutePath());
-            Files.write(pathToDump, (exportedToURL + "\r\n").getBytes(), StandardOpenOption.APPEND);
-        }catch (IOException e) {
-            System.out.println("General I/O exception: " + e.getMessage());
-            e.printStackTrace();
-        }
+                + destination);
+        return destination;
     }
 
     protected String getDestination(String pattern, Artifact artifact, ModuleRevisionId mrid) {

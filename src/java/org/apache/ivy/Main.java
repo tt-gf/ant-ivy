@@ -37,7 +37,6 @@ import java.util.StringTokenizer;
 
 import org.apache.ivy.core.cache.ResolutionCacheManager;
 import org.apache.ivy.core.deliver.DeliverOptions;
-import org.apache.ivy.core.module.descriptor.Artifact;
 import org.apache.ivy.core.module.descriptor.DefaultDependencyDescriptor;
 import org.apache.ivy.core.module.descriptor.DefaultModuleDescriptor;
 import org.apache.ivy.core.module.descriptor.ModuleDescriptor;
@@ -169,8 +168,8 @@ public final class Main {
                     new OptionBuilder("overwrite").description(
                         "overwrite files in the repository if they exist").create())
                 .addOption(
-                    new OptionBuilder("dumptofile").description(
-                        "dumps published artifacts to file").create())
+                    new OptionBuilder("exportdestination").description(
+                        "exports the destination of published artifacts to file").create())
 
                 .addCategory("http auth options")
                 .addOption(
@@ -367,7 +366,8 @@ public final class Main {
                                 settings.substitute(line.getOptionValue("deliverto",
                                     "ivy-[revision].xml")))
                             .setOverwrite(line.hasOption("overwrite"))
-                            .setDumpToFile(line.hasOption("dumptofile")));
+                            .setExportDestination(line.hasOption("exportdestination"),
+                                                  line.getOptionValue("exportdestination", "ivyartifactdestination.txt")));
             }
         }
 
