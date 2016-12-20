@@ -185,7 +185,7 @@ public class IvyRepResolver extends URLResolver {
         setArtifactPatterns(Collections.singletonList(getWholeArtPattern()));
     }
 
-    public void publish(Artifact artifact, File src) {
+    public String publish(Artifact artifact, File src) {
         throw new UnsupportedOperationException("publish not supported by IBiblioResolver");
     }
 

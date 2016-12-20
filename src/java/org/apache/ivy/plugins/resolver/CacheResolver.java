@@ -135,9 +135,9 @@ public class CacheResolver extends FileSystemResolver {
         return super.locate(artifact);
     }
 
-    public void publish(Artifact artifact, File src, boolean overwrite) throws IOException {
+    public String publish(Artifact artifact, File src, boolean overwrite) throws IOException {
         ensureConfigured();
-        super.publish(artifact, src, overwrite);
+        return super.publish(artifact, src, overwrite);
     }
 
     public OrganisationEntry[] listOrganisations() {

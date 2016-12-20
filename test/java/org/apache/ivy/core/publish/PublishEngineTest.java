@@ -57,8 +57,8 @@ public class PublishEngineTest extends TestCase {
         final DefaultModuleDescriptor md = DefaultModuleDescriptor
                 .newDefaultInstance(ModuleRevisionId.parse("#A;1.0"));
         final FileSystemResolver resolver = new FileSystemResolver() {
-            public void publish(Artifact artifact, File src, boolean overwrite) throws IOException {
-                super.publish(artifact, src, overwrite);
+            public String publish(Artifact artifact, File src, boolean overwrite) throws IOException {
+                String destination = super.publish(artifact, src, overwrite);
                 synchronized (PublishEngineTest.this) {
                     counter[0]++;
                 }
@@ -66,6 +66,7 @@ public class PublishEngineTest extends TestCase {
                 synchronized (PublishEngineTest.this) {
                     counter[0]++;
                 }
+                return destination;
             }
         };
         resolver.setName("test");

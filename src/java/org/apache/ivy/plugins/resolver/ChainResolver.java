@@ -238,9 +238,9 @@ public class ChainResolver extends AbstractResolver {
         return chain;
     }
 
-    public void publish(Artifact artifact, File src, boolean overwrite) throws IOException {
+    public String publish(Artifact artifact, File src, boolean overwrite) throws IOException {
 
-        getFirstResolver().publish(artifact, src, overwrite);
+        return getFirstResolver().publish(artifact, src, overwrite);
     }
 
     public void abortPublishTransaction() throws IOException {

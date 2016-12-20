@@ -133,7 +133,7 @@ public interface DependencyResolver {
      */
     ArtifactOrigin locate(Artifact artifact);
 
-    void publish(Artifact artifact, File src, boolean overwrite) throws IOException;
+    String publish(Artifact artifact, File src, boolean overwrite) throws IOException;
 
     void beginPublishTransaction(ModuleRevisionId module, boolean overwrite) throws IOException;
 

@@ -25,8 +25,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import junit.framework.TestCase;
-
 import org.apache.ivy.Ivy;
 import org.apache.ivy.core.IvyContext;
 import org.apache.ivy.core.event.IvyEvent;
@@ -39,6 +37,8 @@ import org.apache.ivy.core.module.descriptor.ModuleDescriptor;
 import org.apache.ivy.plugins.parser.xml.XmlModuleDescriptorParser;
 import org.apache.ivy.plugins.resolver.MockResolver;
 import org.apache.ivy.plugins.trigger.AbstractTrigger;
+
+import junit.framework.TestCase;
 
 public class PublishEventsTest extends TestCase {
 
@@ -454,7 +454,7 @@ public class PublishEventsTest extends TestCase {
      */
     public static class InstrumentedResolver extends MockResolver {
 
-        public void publish(Artifact artifact, File src, boolean overwrite) throws IOException {
+        public String publish(Artifact artifact, File src, boolean overwrite) throws IOException {
 
             // verify that the data from the current test case has been handed down to us
             PublishEventsTest test = (PublishEventsTest) IvyContext.getContext().peek(
@@ -484,6 +484,8 @@ public class PublishEventsTest extends TestCase {
             // all assertions pass. increment the publication count
             test.currentTestCase.published = true;
             ++test.publications;
+
+            return null;
         }
     }
 

@@ -194,7 +194,7 @@ public class RepositoryResolver extends AbstractPatternsBasedResolver {
         return dest.length();
     }
 
-    public void publish(Artifact artifact, File src, boolean overwrite) throws IOException {
+    public String publish(Artifact artifact, File src, boolean overwrite) throws IOException {
         String destPattern;
         if ("ivy".equals(artifact.getType()) && !getIvyPatterns().isEmpty()) {
             destPattern = (String) getIvyPatterns().get(0);
@@ -211,10 +211,11 @@ public class RepositoryResolver extends AbstractPatternsBasedResolver {
         }
 
         String dest = getDestination(destPattern, artifact, mrid);
-
+        String destinationNoPassword = hidePassword(repository.standardize(dest));
         put(artifact, src, dest, overwrite);
         Message.info("\tpublished " + artifact.getName() + " to "
-                + hidePassword(repository.standardize(dest)));
+                + destinationNoPassword);
+        return destinationNoPassword;
     }
 
     protected String getDestination(String pattern, Artifact artifact, ModuleRevisionId mrid) {
