@@ -291,7 +291,9 @@ public class PublishEngine {
     private void outputDestination(String exportDestinationFilename, String destination) {
         PrintWriter writer = null;
         try {
-            writer = new PrintWriter(new FileOutputStream(new File(exportDestinationFilename), true /* append */));
+            File file = new File(exportDestinationFilename);
+            file.getParentFile().mkdirs();
+            writer = new PrintWriter(new FileOutputStream(file, true /* append */));
             if (!destination.isEmpty()) {
                 writer.println(destination);
             }
