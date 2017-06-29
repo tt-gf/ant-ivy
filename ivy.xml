@@ -14,10 +14,10 @@
    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
    KIND, either express or implied.  See the License for the
    specific language governing permissions and limitations
-   under the License.    
+   under the License.
 -->
 <ivy-module version="1.0"
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"            
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
 	<info organisation="org.apache.ivy"
 	       module="ivy"
@@ -46,7 +46,7 @@
 	    <dependency org="org.apache.ant" name="ant" rev="1.7.1" conf="default,ant->default"/>
 	    <dependency org="org.apache.ant" name="ant-nodeps" rev="1.7.1" conf="default"/>
         <dependency org="org.apache.ant" name="ant-trax" rev="1.7.1" conf="default"/>
-		<dependency org="commons-httpclient" name="commons-httpclient" rev="3.0" conf="default,httpclient->runtime,master" />
+		<dependency org="commons-httpclient" name="commons-httpclient" rev="3.1" conf="default,httpclient->runtime,master" />
 		<dependency org="oro" name="oro" rev="2.0.8" conf="default,oro->default"/>
 		<dependency org="commons-vfs" name="commons-vfs" rev="1.0" conf="default,vfs->default" />
 		<dependency org="com.jcraft" name="jsch" rev="0.1.50" conf="default,sftp->default" />
@@ -62,7 +62,7 @@
 		<dependency org="org.apache.ant" name="ant-testutil" rev="1.7.0" conf="test->default" transitive="false" />
         <dependency org="ant" name="ant-launcher" rev="1.6.2" conf="test->default" transitive="false"/>
         <dependency org="ant-contrib" name="ant-contrib" rev="1.0b3" conf="test->default" transitive="false"/>
-		
+
 		<!-- This dependency is necessary for having validation in junit tests when running with JDK1.4 -->
 		<dependency org="xerces" name="xercesImpl" rev="2.6.2" conf="test->default" />
 		<dependency org="xerces" name="xmlParserAPIs" rev="2.6.2" conf="test->default" />
