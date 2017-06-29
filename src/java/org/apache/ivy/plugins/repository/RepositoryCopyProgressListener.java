@@ -28,6 +28,7 @@ public class RepositoryCopyProgressListener implements CopyProgressListener {
     }
 
     private Long totalLength = null;
+    private int progressPercentage = 0;
 
     public void start(CopyProgressEvent evt) {
         if (totalLength != null) {
@@ -38,7 +39,13 @@ public class RepositoryCopyProgressListener implements CopyProgressListener {
     }
 
     public void progress(CopyProgressEvent evt) {
-        repository.fireTransferProgress(evt.getReadBytes());
+        if (this.totalLength != null) {
+            int percentage = (int) (0.5d + ((double)evt.getTotalReadBytes() / (double)this.totalLength) * 100);
+            if ((percentage % 5) == 0 && percentage != this.progressPercentage) {
+                this.progressPercentage = percentage;
+                repository.fireTransferProgress(evt.getReadBytes());
+            }
+        }
     }
 
     public void end(CopyProgressEvent evt) {
