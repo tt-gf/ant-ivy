@@ -327,6 +327,7 @@
                 <attribute name="Build-Version" value="${build.version}"/>
             </manifest>
             <fileset dir="${all.classes.build.dir}"/>
+            <zipgroupfileset dir="${lib.dir}" includes="httpcore.jar,httpclient.jar,commons-codec.jar,commons-logging.jar"/>
         </jar>
         <!-- copy main jar to ease its use as an OSGi bundle -->
         <copy file="${artifacts.build.dir}/jars/${final.name}"
