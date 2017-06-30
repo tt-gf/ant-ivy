@@ -39,7 +39,7 @@ public final class URLHandlerRegistry {
     /**
      * This method is used to get appropriate http downloader dependening on Jakarta Commons
      * HttpClient availability in classpath, or simply use jdk url handling in other cases.
-     * 
+     *
      * @return most accurate http downloader
      */
     public static URLHandler getHttp() {
@@ -70,4 +70,7 @@ public final class URLHandlerRegistry {
         }
     }
 
+    public static void setTimeout(int timeout) {
+        defaultHandler.setTimeout(timeout);
+    }
 }

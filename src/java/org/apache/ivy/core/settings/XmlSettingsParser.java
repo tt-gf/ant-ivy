@@ -129,6 +129,8 @@ public class XmlSettingsParser extends DefaultHandler {
 
     private boolean deprecatedMessagePrinted = false;
 
+    private Integer defaultTimeout = null;
+
     public XmlSettingsParser(IvySettings ivy) {
         this.ivy = ivy;
     }
@@ -374,6 +376,10 @@ public class XmlSettingsParser extends DefaultHandler {
 
         // we do not set following defaults here since no instances has been registered yet
         defaultResolver = (String) attributes.get("defaultResolver");
+        String timeoutAttribute = (String) attributes.get("defaultTimeout");
+        if (timeoutAttribute != null) {
+            defaultTimeout = Integer.parseInt(timeoutAttribute);
+        }
         defaultCM = (String) attributes.get("defaultConflictManager");
         defaultLatest = (String) attributes.get("defaultLatestStrategy");
         defaultCircular = (String) attributes.get("circularDependencyStrategy");
@@ -601,6 +607,9 @@ public class XmlSettingsParser extends DefaultHandler {
     public void endDocument() throws SAXException {
         if (defaultResolver != null) {
             ivy.setDefaultResolver(ivy.substitute(defaultResolver));
+        }
+        if (defaultTimeout != null) {
+            ivy.setDefaultTimeout(defaultTimeout);
         }
         if (defaultCM != null) {
             ConflictManager conflictManager = ivy.getConflictManager(ivy.substitute(defaultCM));

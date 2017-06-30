@@ -35,11 +35,13 @@ import org.apache.ivy.util.FileUtil;
 import org.apache.ivy.util.Message;
 
 /**
- * 
+ *
  */
 public class BasicURLHandler extends AbstractURLHandler {
 
     private static final int BUFFER_SIZE = 64 * 1024;
+
+    private int defaultTimeout = 0;
 
     private static final class HttpStatus {
         static final int SC_OK = 200;
@@ -51,7 +53,7 @@ public class BasicURLHandler extends AbstractURLHandler {
     }
 
     public URLInfo getURLInfo(URL url) {
-        return getURLInfo(url, 0);
+        return getURLInfo(url, defaultTimeout);
     }
 
     public URLInfo getURLInfo(URL url, int timeout) {
@@ -63,8 +65,7 @@ public class BasicURLHandler extends AbstractURLHandler {
         URLConnection con = null;
         try {
             url = normalizeToURL(url);
-            con = url.openConnection();
-            con.setRequestProperty("User-Agent", getUserAgent());
+            con = openConnection(url);
             if (con instanceof HttpURLConnection) {
                 HttpURLConnection httpCon = (HttpURLConnection) con;
                 if (getRequestMethod() == URLHandler.REQUEST_METHOD_HEAD) {
@@ -100,7 +101,7 @@ public class BasicURLHandler extends AbstractURLHandler {
     /**
      * Extract the charset from the Content-Type header string, or default to ISO-8859-1 as per
      * rfc2616-sec3.html#sec3.7.1 .
-     * 
+     *
      * @param contentType
      *            the Content-Type header string
      * @return the charset as specified in the content type, or ISO-8859-1 if unspecified.
@@ -158,8 +159,7 @@ public class BasicURLHandler extends AbstractURLHandler {
         URLConnection conn = null;
         try {
             url = normalizeToURL(url);
-            conn = url.openConnection();
-            conn.setRequestProperty("User-Agent", getUserAgent());
+            conn = openConnection(url);
             conn.setRequestProperty("Accept-Encoding", "gzip,deflate");
             if (conn instanceof HttpURLConnection) {
                 HttpURLConnection httpCon = (HttpURLConnection) conn;
@@ -192,8 +192,7 @@ public class BasicURLHandler extends AbstractURLHandler {
         URLConnection srcConn = null;
         try {
             src = normalizeToURL(src);
-            srcConn = src.openConnection();
-            srcConn.setRequestProperty("User-Agent", getUserAgent());
+            srcConn = openConnection(src);
             srcConn.setRequestProperty("Accept-Encoding", "gzip,deflate");
             if (srcConn instanceof HttpURLConnection) {
                 HttpURLConnection httpCon = (HttpURLConnection) srcConn;
@@ -241,7 +240,7 @@ public class BasicURLHandler extends AbstractURLHandler {
         HttpURLConnection conn = null;
         try {
             dest = normalizeToURL(dest);
-            conn = (HttpURLConnection) dest.openConnection();
+            conn = (HttpURLConnection) openConnection(dest);
             conn.setDoOutput(true);
             conn.setRequestMethod("PUT");
             conn.setRequestProperty("User-Agent", getUserAgent());
@@ -326,5 +325,27 @@ public class BasicURLHandler extends AbstractURLHandler {
                 }
             }
         }
+    }
+
+    public int getTimeout() {
+        return defaultTimeout;
+    }
+
+    public void setTimeout(int defaultTimeout) {
+        this.defaultTimeout = defaultTimeout;
+    }
+
+    protected URLConnection openConnection(URL url) throws IOException {
+        return openConnection(url, defaultTimeout);
+    }
+
+    protected URLConnection openConnection(URL url, int timeout) throws IOException{
+        URLConnection con = url.openConnection();
+        if (timeout != 0) {
+            con.setConnectTimeout(timeout);
+            con.setReadTimeout(timeout);
+        }
+        con.setRequestProperty("User-Agent", getUserAgent());
+        return con;
     }
 }

@@ -83,7 +83,7 @@ public interface URLHandler {
 
     /**
      * Please prefer getURLInfo when several infos are needed.
-     * 
+     *
      * @param url
      *            the url to check
      * @return true if the target is reachable
@@ -92,7 +92,7 @@ public interface URLHandler {
 
     /**
      * Please prefer getURLInfo when several infos are needed.
-     * 
+     *
      * @param url
      *            the url to check
      * @return true if the target is reachable
@@ -102,7 +102,7 @@ public interface URLHandler {
     /**
      * Returns the length of the target if the given url is reachable, and without error code in
      * case of http urls. Please prefer getURLInfo when several infos are needed.
-     * 
+     *
      * @param url
      *            the url to check
      * @return the length of the target if available, 0 if not reachable
@@ -112,7 +112,7 @@ public interface URLHandler {
     /**
      * Returns the length of the target if the given url is reachable, and without error code in
      * case of http urls.
-     * 
+     *
      * @param url
      *            the url to check
      * @param timeout
@@ -124,7 +124,7 @@ public interface URLHandler {
 
     /**
      * Please prefer getURLInfo when several infos are needed.
-     * 
+     *
      * @param url
      *            the url to check
      * @return last modified timestamp of the given url
@@ -133,7 +133,7 @@ public interface URLHandler {
 
     /**
      * Please prefer getURLInfo when several infos are needed.
-     * 
+     *
      * @param url
      *            the url to check
      * @return last modified timestamp of the given url
@@ -143,7 +143,7 @@ public interface URLHandler {
     /**
      * Returns the URLInfo of the given url or a {@link #UNAVAILABLE} instance, if the url is not
      * reachable.
-     * 
+     *
      * @param url
      *            The url from which information is retrieved.
      * @return The URLInfo extracted from the given url, or {@link #UNAVAILABLE} when the url is not
@@ -153,7 +153,7 @@ public interface URLHandler {
 
     /**
      * never returns null, return UNAVAILABLE when url is not reachable
-     * 
+     *
      * @param url
      *            The url from which information is retrieved.
      * @param timeout
@@ -170,4 +170,6 @@ public interface URLHandler {
     public void upload(File src, URL dest, CopyProgressListener l) throws IOException;
 
     public void setRequestMethod(int requestMethod);
+
+    public void setTimeout(int timeout);
 }

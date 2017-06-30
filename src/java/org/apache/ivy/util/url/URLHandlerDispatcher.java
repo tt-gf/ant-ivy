@@ -106,4 +106,12 @@ public class URLHandlerDispatcher implements URLHandler {
     public void setDefault(URLHandler default1) {
         defaultHandler = default1;
     }
+
+    public void setTimeout(int timeout) {
+        defaultHandler.setTimeout(timeout);
+        for (Object obj : handlers.values()) {
+            URLHandler handler = (URLHandler) obj;
+            handler.setTimeout(timeout);
+        }
+    }
 }

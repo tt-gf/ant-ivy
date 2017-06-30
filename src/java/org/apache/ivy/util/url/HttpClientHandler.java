@@ -47,6 +47,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
+import org.apache.commons.httpclient.params.HttpConnectionParams;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.ivy.Ivy;
 import org.apache.ivy.util.CopyProgressListener;
@@ -69,6 +70,8 @@ public class HttpClientHandler extends AbstractURLHandler {
     private String proxyUserName = null;
 
     private String proxyPasswd = null;
+
+    private int defaultTimeout = 0;
 
     private HttpClientHelper httpClientHelper;
 
@@ -95,7 +98,7 @@ public class HttpClientHandler extends AbstractURLHandler {
     }
 
     public InputStream openStream(URL url) throws IOException {
-        GetMethod get = doGet(url, 0);
+        GetMethod get = doGet(url, defaultTimeout);
         if (!checkStatusCode(url, get)) {
             get.releaseConnection();
             throw new IOException("The HTTP response code for " + url
@@ -108,7 +111,7 @@ public class HttpClientHandler extends AbstractURLHandler {
     }
 
     public void download(URL src, File dest, CopyProgressListener l) throws IOException {
-        GetMethod get = doGet(src, 0);
+        GetMethod get = doGet(src, defaultTimeout);
         try {
             // We can only figure the content we got is want we want if the status is success.
             if (!checkStatusCode(src, get)) {
@@ -142,7 +145,7 @@ public class HttpClientHandler extends AbstractURLHandler {
     }
 
     public URLInfo getURLInfo(URL url) {
-        return getURLInfo(url, 0);
+        return getURLInfo(url, defaultTimeout);
     }
 
     public URLInfo getURLInfo(URL url, int timeout) {
@@ -248,7 +251,8 @@ public class HttpClientHandler extends AbstractURLHandler {
 
     private GetMethod doGet(URL url, int timeout) throws IOException {
         HttpClient client = getClient();
-        client.setTimeout(timeout);
+        client.getParams().setParameter(HttpConnectionParams.CONNECTION_TIMEOUT, timeout);
+        client.getParams().setParameter(HttpConnectionParams.SO_TIMEOUT, timeout);
 
         GetMethod get = new GetMethod(normalizeToString(url));
         get.setDoAuthentication(useAuthentication(url) || useProxyAuthentication());
@@ -259,7 +263,8 @@ public class HttpClientHandler extends AbstractURLHandler {
 
     private HeadMethod doHead(URL url, int timeout) throws IOException {
         HttpClient client = getClient();
-        client.setTimeout(timeout);
+        client.getParams().setParameter(HttpConnectionParams.CONNECTION_TIMEOUT, timeout);
+        client.getParams().setParameter(HttpConnectionParams.SO_TIMEOUT, timeout);
 
         HeadMethod head = new HeadMethod(normalizeToString(url));
         head.setDoAuthentication(useAuthentication(url) || useProxyAuthentication());
@@ -428,4 +433,7 @@ public class HttpClientHandler extends AbstractURLHandler {
         }
     }
 
+    public void setTimeout(int timeout) {
+        this.defaultTimeout = timeout;
+    }
 }
