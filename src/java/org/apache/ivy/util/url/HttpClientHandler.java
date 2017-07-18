@@ -251,8 +251,6 @@ public class HttpClientHandler extends AbstractURLHandler {
 
     private GetMethod doGet(URL url, int timeout) throws IOException {
         HttpClient client = getClient();
-        client.getParams().setParameter(HttpConnectionParams.CONNECTION_TIMEOUT, timeout);
-        client.getParams().setParameter(HttpConnectionParams.SO_TIMEOUT, timeout);
 
         GetMethod get = new GetMethod(normalizeToString(url));
         get.setDoAuthentication(useAuthentication(url) || useProxyAuthentication());
@@ -263,8 +261,6 @@ public class HttpClientHandler extends AbstractURLHandler {
 
     private HeadMethod doHead(URL url, int timeout) throws IOException {
         HttpClient client = getClient();
-        client.getParams().setParameter(HttpConnectionParams.CONNECTION_TIMEOUT, timeout);
-        client.getParams().setParameter(HttpConnectionParams.SO_TIMEOUT, timeout);
 
         HeadMethod head = new HeadMethod(normalizeToString(url));
         head.setDoAuthentication(useAuthentication(url) || useProxyAuthentication());
@@ -288,6 +284,9 @@ public class HttpClientHandler extends AbstractURLHandler {
             authPrefs.add(AuthPolicy.BASIC);
             authPrefs.add(AuthPolicy.NTLM); // put it at the end to give less priority (IVY-213)
             httpClient.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);
+            httpClient.getParams().setAuthenticationPreemptive(true);
+            httpClient.getParams().setParameter(HttpConnectionParams.CONNECTION_TIMEOUT, defaultTimeout);
+            httpClient.getParams().setParameter(HttpConnectionParams.SO_TIMEOUT, defaultTimeout);
 
             if (useProxy()) {
                 httpClient.getHostConfiguration().setProxy(proxyHost, proxyPort);

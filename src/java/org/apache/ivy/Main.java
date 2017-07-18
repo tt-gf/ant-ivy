@@ -398,7 +398,7 @@ public final class Main {
      * All the files contained in the returned List exist, non existing files are simply skipped
      * with a warning.
      * </p>
-     * 
+     *
      * @param line
      *            the command line in which the cp option shold be parsed
      * @return a List of files to include as extra classpath entries, or <code>null</code> if no cp
@@ -460,16 +460,28 @@ public final class Main {
     }
 
     private static void initMessage(CommandLine line, Ivy ivy) {
+        System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
+        System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
         if (line.hasOption("debug")) {
             ivy.getLoggerEngine().pushLogger(new DefaultMessageLogger(Message.MSG_DEBUG));
+            System.setProperty("org.apache.commons.logging.simplelog.log.httpclient.wire.header", "debug");
+            System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.commons.httpclient", "debug");
         } else if (line.hasOption("verbose")) {
             ivy.getLoggerEngine().pushLogger(new DefaultMessageLogger(Message.MSG_VERBOSE));
+            System.setProperty("org.apache.commons.logging.simplelog.log.httpclient.wire.header", "trace");
+            System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.commons.httpclient", "trace");
         } else if (line.hasOption("warn")) {
             ivy.getLoggerEngine().pushLogger(new DefaultMessageLogger(Message.MSG_WARN));
+            System.setProperty("org.apache.commons.logging.simplelog.log.httpclient.wire.header", "warn");
+            System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.commons.httpclient", "warn");
         } else if (line.hasOption("error")) {
             ivy.getLoggerEngine().pushLogger(new DefaultMessageLogger(Message.MSG_ERR));
+            System.setProperty("org.apache.commons.logging.simplelog.log.httpclient.wire.header", "error");
+            System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.commons.httpclient", "error");
         } else {
             ivy.getLoggerEngine().pushLogger(new DefaultMessageLogger(Message.MSG_INFO));
+            System.setProperty("org.apache.commons.logging.simplelog.log.httpclient.wire.header", "info");
+            System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.commons.httpclient", "info");
         }
     }
 
