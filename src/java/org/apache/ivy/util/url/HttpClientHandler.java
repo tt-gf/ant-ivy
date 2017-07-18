@@ -98,7 +98,7 @@ public class HttpClientHandler extends AbstractURLHandler {
     }
 
     public InputStream openStream(URL url) throws IOException {
-        GetMethod get = doGet(url, defaultTimeout);
+        GetMethod get = doGet(url);
         if (!checkStatusCode(url, get)) {
             get.releaseConnection();
             throw new IOException("The HTTP response code for " + url
@@ -111,7 +111,7 @@ public class HttpClientHandler extends AbstractURLHandler {
     }
 
     public void download(URL src, File dest, CopyProgressListener l) throws IOException {
-        GetMethod get = doGet(src, defaultTimeout);
+        GetMethod get = doGet(src);
         try {
             // We can only figure the content we got is want we want if the status is success.
             if (!checkStatusCode(src, get)) {
@@ -152,9 +152,9 @@ public class HttpClientHandler extends AbstractURLHandler {
         HttpMethodBase method = null;
         try {
             if (getRequestMethod() == URLHandler.REQUEST_METHOD_HEAD) {
-                method = doHead(url, timeout);
+                method = doHead(url);
             } else {
-                method = doGet(url, timeout);
+                method = doGet(url);
             }
             if (checkStatusCode(url, method)) {
                 return new URLInfo(true, getResponseContentLength(method), getLastModified(method),
@@ -249,7 +249,7 @@ public class HttpClientHandler extends AbstractURLHandler {
         return helper.getHttpClientMajorVersion();
     }
 
-    private GetMethod doGet(URL url, int timeout) throws IOException {
+    private GetMethod doGet(URL url) throws IOException {
         HttpClient client = getClient();
 
         GetMethod get = new GetMethod(normalizeToString(url));
@@ -259,7 +259,7 @@ public class HttpClientHandler extends AbstractURLHandler {
         return get;
     }
 
-    private HeadMethod doHead(URL url, int timeout) throws IOException {
+    private HeadMethod doHead(URL url) throws IOException {
         HttpClient client = getClient();
 
         HeadMethod head = new HeadMethod(normalizeToString(url));
