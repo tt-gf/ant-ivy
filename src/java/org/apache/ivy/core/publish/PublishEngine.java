@@ -18,7 +18,9 @@
 package org.apache.ivy.core.publish;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -252,7 +254,7 @@ public class PublishEngine {
             resolver.beginPublishTransaction(md.getModuleRevisionId(), options.isOverwrite());
             // for each declared published artifact in this descriptor, do:
             for (Entry<Artifact, File> entry : artifactsFiles.entrySet()) {
-                publish(entry.getKey(), entry.getValue(), resolver, options.isOverwrite());
+                publish(entry.getKey(), entry.getValue(), resolver, options);
             }
             resolver.commitPublishTransaction();
             successfullyPublished = true;
@@ -264,22 +266,43 @@ public class PublishEngine {
         return missing;
     }
 
-    private void publish(Artifact artifact, File src, DependencyResolver resolver, boolean overwrite)
+    private void publish(Artifact artifact, File src, DependencyResolver resolver, PublishOptions options)
             throws IOException {
         IvyContext.getContext().checkInterrupted();
         // notify triggers that an artifact is about to be published
         eventManager
-                .fireIvyEvent(new StartArtifactPublishEvent(resolver, artifact, src, overwrite));
+                .fireIvyEvent(new StartArtifactPublishEvent(resolver, artifact, src, options.isOverwrite()));
         boolean successful = false; // set to true once the publish succeeds
         try {
             if (src.exists()) {
-                resolver.publish(artifact, src, overwrite);
+                String destination = resolver.publish(artifact, src, options.isOverwrite());
                 successful = true;
+                if (options.isExportDestination()) {
+                    outputDestination(options.getExportDestinationFilename(), destination);
+                }
             }
         } finally {
             // notify triggers that the publish is finished, successfully or not.
             eventManager.fireIvyEvent(new EndArtifactPublishEvent(resolver, artifact, src,
-                    overwrite, successful));
+                    options.isOverwrite(), successful));
+        }
+    }
+
+    private void outputDestination(String exportDestinationFilename, String destination) {
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter(new FileOutputStream(new File(exportDestinationFilename), true /* append */));
+            if (!destination.isEmpty()) {
+                writer.println(destination);
+            }
+        }
+        catch(IOException ioe) {
+            throw new RuntimeException("impossible to create artifact destination file: " + ioe.getMessage(), ioe);
+        }
+        finally {
+            if (writer != null) {
+                writer.close();
+            }
         }
     }
 }

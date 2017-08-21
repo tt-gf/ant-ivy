@@ -129,12 +129,13 @@ public class DualResolver extends AbstractResolver {
         this.ivyResolver = ivyResolver;
     }
 
-    public void publish(Artifact artifact, File src, boolean overwrite) throws IOException {
+    public String publish(Artifact artifact, File src, boolean overwrite) throws IOException {
         if ("ivy".equals(artifact.getType())) {
             ivyResolver.publish(artifact, src, overwrite);
         } else {
             artifactResolver.publish(artifact, src, overwrite);
         }
+        return null;
     }
 
     @Override

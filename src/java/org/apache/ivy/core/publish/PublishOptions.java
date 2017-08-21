@@ -63,6 +63,10 @@ public class PublishOptions {
 
     private boolean warnonmissing;
 
+    private boolean exportDestination;
+
+    private String exportDestinationFilename;
+
     public String[] getConfs() {
         return confs;
     }
@@ -177,6 +181,16 @@ public class PublishOptions {
 
     public PublishOptions setWarnOnMissing(boolean warnonmissing) {
         this.warnonmissing = warnonmissing;
+        return this;
+    }
+
+    public boolean isExportDestination() { return exportDestination; }
+
+    public String getExportDestinationFilename() { return exportDestinationFilename; }
+
+    public PublishOptions setExportDestination(boolean exportDestination, String filename) {
+        this.exportDestination = exportDestination;
+        this.exportDestinationFilename = filename;
         return this;
     }
 

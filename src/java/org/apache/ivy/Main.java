@@ -168,6 +168,9 @@ public final class Main {
                 .addOption(
                     new OptionBuilder("overwrite").description(
                         "overwrite files in the repository if they exist").create())
+                .addOption(
+                    new OptionBuilder("exportdestination").arg("exportdestinationfile").description(
+                        "exports the destination of published artifacts to file").create())
 
                 .addCategory("http auth options")
                 .addOption(
@@ -364,7 +367,9 @@ public final class Main {
                             .setSrcIvyPattern(
                                 settings.substitute(line.getOptionValue("deliverto",
                                     "ivy-[revision].xml")))
-                            .setOverwrite(line.hasOption("overwrite")));
+                            .setOverwrite(line.hasOption("overwrite"))
+                            .setExportDestination(line.hasOption("exportdestination"),
+                                                  line.getOptionValue("exportdestination", "ivyartifactdestination.txt")));
             }
         }
         if (line.hasOption("main")) {
