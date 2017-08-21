@@ -461,16 +461,23 @@ public final class Main {
     }
 
     private static void initMessage(CommandLine line, Ivy ivy) {
+        System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
+        System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
         if (line.hasOption("debug")) {
             ivy.getLoggerEngine().pushLogger(new DefaultMessageLogger(Message.MSG_DEBUG));
+            System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http", "DEBUG");
         } else if (line.hasOption("verbose")) {
             ivy.getLoggerEngine().pushLogger(new DefaultMessageLogger(Message.MSG_VERBOSE));
+            System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http", "TRACE");
         } else if (line.hasOption("warn")) {
             ivy.getLoggerEngine().pushLogger(new DefaultMessageLogger(Message.MSG_WARN));
+            System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http", "WARN");
         } else if (line.hasOption("error")) {
             ivy.getLoggerEngine().pushLogger(new DefaultMessageLogger(Message.MSG_ERR));
+            System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http", "ERROR");
         } else {
             ivy.getLoggerEngine().pushLogger(new DefaultMessageLogger(Message.MSG_INFO));
+            System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http", "INFO");
         }
     }
 
