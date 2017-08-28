@@ -288,4 +288,6 @@ public interface URLHandler {
     void upload(File src, URL dest, CopyProgressListener listener, TimeoutConstraint timeoutConstraint) throws IOException;
 
     void setRequestMethod(int requestMethod);
+
+    void setPreferPreemptiveAuth(boolean prefer);
 }

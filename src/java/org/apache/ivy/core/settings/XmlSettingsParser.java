@@ -378,6 +378,11 @@ public class XmlSettingsParser extends DefaultHandler {
             throw new IllegalArgumentException(
                     "Invalid httpRequestMethod specified, must be one of {'HEAD', 'GET'}");
         }
+
+        String preferPreemptiveAuth = attributes.get("preferPreemptiveAuth");
+        if (preferPreemptiveAuth != null) {
+            URLHandlerRegistry.getHttp().setPreferPreemptiveAuth(Boolean.valueOf(preferPreemptiveAuth));
+        }
     }
 
     private void includeStarted(Map<String, String> attributes) throws IOException, ParseException {

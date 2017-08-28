@@ -61,6 +61,8 @@ So if there is a setting in the resolver, it always wins against all other setti
         <td>No, defaults to false</td></tr>
     <tr><td>httpRequestMethod</td><td>specifies the HTTP method to use to retrieve information about an URL. Possible values are 'GET' and 'HEAD'. This setting can be used to solve problems with firewalls and proxies. (<span class="since">since 2.0</span>)</td>
         <td>No, defaults to 'HEAD'</td></tr>
+    <tr><td>preferPreemptiveAuth</td><td>true to use <a href="https://hc.apache.org/httpcomponents-client-4.5.x/tutorial/html/authentication.html">preemptive authentication</a> whenever possible (only supported with <a href="https://hc.apache.org/httpcomponents-client-4.5.x">HttpClient</a> as URL Handler) (<span class="since">since 2.5</span>)</td>
+        <td>No, defaults to false</td></tr>
     <tr><td><s>defaultCache</s></td><td>a path to a directory to use as default basedir for both resolution and repository cache(s).
 	    <i>Deprecated, we recommend using defaultCacheDir on the [[settings/caches]] tag instead</i></td>
         <td>No, defaults to .ivy2/cache in user home</td></tr>
