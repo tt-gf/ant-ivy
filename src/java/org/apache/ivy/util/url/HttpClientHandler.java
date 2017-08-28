@@ -335,7 +335,7 @@ class HttpClientHandler extends AbstractURLHandler implements AutoCloseable {
     }
 
     private HttpClientContext getHttpClientContext(URL dest) {
-        if (!getPreferPreemptiveAuth()) {
+        if (!getPreemptiveAuth()) {
             return null;
         }
 

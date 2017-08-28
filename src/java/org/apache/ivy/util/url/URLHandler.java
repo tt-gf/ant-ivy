@@ -289,5 +289,5 @@ public interface URLHandler {
 
     void setRequestMethod(int requestMethod);
 
-    void setPreferPreemptiveAuth(boolean prefer);
+    void setPreemptiveAuth(boolean preemptive);
 }

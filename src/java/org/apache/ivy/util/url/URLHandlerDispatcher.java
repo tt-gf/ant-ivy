@@ -135,10 +135,10 @@ public class URLHandlerDispatcher implements URLHandler {
         }
     }
 
-    public void setPreferPreemptiveAuth(boolean prefer) {
-        defaultHandler.setPreferPreemptiveAuth(prefer);
+    public void setPreemptiveAuth(boolean preemptive) {
+        defaultHandler.setPreemptiveAuth(preemptive);
         for (URLHandler handler : handlers.values()) {
-            handler.setPreferPreemptiveAuth(prefer);
+            handler.setPreemptiveAuth(preemptive);
         }
     }
 

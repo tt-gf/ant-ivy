@@ -40,7 +40,7 @@ public abstract class AbstractURLHandler implements URLHandler {
     // the request method to use. TODO: don't use a static here
     private static int requestMethod = REQUEST_METHOD_HEAD;
 
-    private boolean preferPreemptiveAuth = false;
+    private boolean preemptiveAuth = false;
 
     @Override
     public boolean isReachable(final URL url) {
@@ -121,12 +121,12 @@ public abstract class AbstractURLHandler implements URLHandler {
         return requestMethod;
     }
 
-    public void setPreferPreemptiveAuth(boolean prefer) {
-        this.preferPreemptiveAuth = prefer;
+    public void setPreemptiveAuth(boolean preemptive) {
+        this.preemptiveAuth = preemptive;
     }
 
-    public boolean getPreferPreemptiveAuth() {
-        return this.preferPreemptiveAuth;
+    public boolean getPreemptiveAuth() {
+        return this.preemptiveAuth;
     }
 
     protected String normalizeToString(URL url) throws IOException {
