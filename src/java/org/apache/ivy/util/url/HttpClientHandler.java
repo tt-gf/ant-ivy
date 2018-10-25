@@ -29,6 +29,7 @@ import org.apache.http.auth.NTCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.AuthCache;
 import org.apache.http.client.config.AuthSchemes;
+import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -182,6 +183,7 @@ class HttpClientHandler extends AbstractURLHandler implements AutoCloseable {
         final int connectionTimeout = (timeoutConstraint == null || timeoutConstraint.getConnectionTimeout() < 0) ? 0 : timeoutConstraint.getConnectionTimeout();
         final int readTimeout = (timeoutConstraint == null || timeoutConstraint.getReadTimeout() < 0) ? 0 : timeoutConstraint.getReadTimeout();
         final RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(readTimeout)
+                .setCookieSpec(CookieSpecs.STANDARD)
                 .setConnectTimeout(connectionTimeout)
                 .setAuthenticationEnabled(hasCredentialsConfigured(dest))
                 .setTargetPreferredAuthSchemes(getAuthSchemePreferredOrder())
@@ -307,6 +309,7 @@ class HttpClientHandler extends AbstractURLHandler implements AutoCloseable {
 
     private CloseableHttpResponse doGet(final URL url, final int connectionTimeout, final int readTimeout) throws IOException {
         final RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(readTimeout)
+                .setCookieSpec(CookieSpecs.STANDARD)
                 .setConnectTimeout(connectionTimeout)
                 .setAuthenticationEnabled(hasCredentialsConfigured(url))
                 .setTargetPreferredAuthSchemes(getAuthSchemePreferredOrder())
@@ -320,6 +323,7 @@ class HttpClientHandler extends AbstractURLHandler implements AutoCloseable {
 
     private CloseableHttpResponse doHead(final URL url, final int connectionTimeout, final int readTimeout) throws IOException {
         final RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(readTimeout)
+                .setCookieSpec(CookieSpecs.STANDARD)
                 .setConnectTimeout(connectionTimeout)
                 .setAuthenticationEnabled(hasCredentialsConfigured(url))
                 .setTargetPreferredAuthSchemes(getAuthSchemePreferredOrder())
