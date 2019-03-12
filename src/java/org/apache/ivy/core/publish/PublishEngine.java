@@ -33,6 +33,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.apache.ivy.core.IvyContext;
 import org.apache.ivy.core.IvyPatternHelper;
@@ -49,6 +50,7 @@ import org.apache.ivy.plugins.parser.xml.UpdateOptions;
 import org.apache.ivy.plugins.parser.xml.XmlModuleDescriptorParser;
 import org.apache.ivy.plugins.parser.xml.XmlModuleDescriptorUpdater;
 import org.apache.ivy.plugins.resolver.DependencyResolver;
+import org.apache.ivy.util.ChecksumHelper;
 import org.apache.ivy.util.Message;
 import org.xml.sax.SAXException;
 
@@ -278,7 +280,7 @@ public class PublishEngine {
                 String destination = resolver.publish(artifact, src, options.isOverwrite());
                 successful = true;
                 if (options.isExportDestination()) {
-                    outputDestination(options.getExportDestinationFilename(), destination);
+                    outputDestination(options.getExportDestinationFilename(), src, destination);
                 }
             }
         } finally {
@@ -288,14 +290,32 @@ public class PublishEngine {
         }
     }
 
-    private void outputDestination(String exportDestinationFilename, String destination) {
+    private static final Pattern YAML_INVALID_SINGLE_QUOTE_PATTERN = Pattern.compile("[^\\x09\\x20-\\x{10ffff}]");
+    private static String YamlEscape(String toEscape) {
+        if (YAML_INVALID_SINGLE_QUOTE_PATTERN.matcher(toEscape).find()) {
+            throw new RuntimeException("String requested for escaping contains control characters, we don't handle those: '" + toEscape + "'");
+        }
+        return "'" + toEscape.replace("'", "''") + "'";
+    }
+
+    private void outputDestination(String exportDestinationFilename, File src, String destination) {
         PrintWriter writer = null;
         try {
             File file = new File(exportDestinationFilename);
             file.getParentFile().mkdirs();
             writer = new PrintWriter(new FileOutputStream(file, true /* append */));
             if (!destination.isEmpty()) {
-                writer.println(destination);
+                writer.format("- {file: %s, url: %s,"
+                        , YamlEscape(src.getAbsolutePath())
+                        , YamlEscape(destination)
+                        );
+                for (String algorithm : new String[]{"md5", "sha1", "SHA-256", "SHA-384", "SHA-512",})
+                {
+                    if (!ChecksumHelper.isKnownAlgorithm(algorithm))
+                        continue;
+                    writer.format("%s: %s,", algorithm, ChecksumHelper.computeAsString(src, algorithm));
+                }
+                writer.println("}");
             }
         }
         catch(IOException ioe) {
