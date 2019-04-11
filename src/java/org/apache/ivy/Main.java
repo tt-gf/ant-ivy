@@ -369,7 +369,7 @@ public final class Main {
                                     "ivy-[revision].xml")))
                             .setOverwrite(line.hasOption("overwrite"))
                             .setExportDestination(line.hasOption("exportdestination"),
-                                                  line.getOptionValue("exportdestination", "ivyartifactdestination.txt")));
+                                                  line.getOptionValue("exportdestination", "ivyartifactdestination.yml")));
             }
         }
         if (line.hasOption("main")) {
