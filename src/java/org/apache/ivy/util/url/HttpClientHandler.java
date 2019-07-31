@@ -36,6 +36,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.client.ServiceUnavailableRetryStrategy;
 import org.apache.http.config.Lookup;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.HttpClientConnectionManager;
@@ -51,6 +52,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.impl.conn.SystemDefaultRoutePlanner;
+import org.apache.http.protocol.HttpContext;
 import org.apache.ivy.core.settings.TimeoutConstraint;
 import org.apache.ivy.util.CopyProgressListener;
 import org.apache.ivy.util.FileUtil;
@@ -111,7 +113,23 @@ class HttpClientHandler extends AbstractURLHandler implements AutoCloseable {
                 .setUserAgent(this.getUserAgent())
                 .setDefaultAuthSchemeRegistry(createAuthSchemeRegistry())
                 .setDefaultCredentialsProvider(new IvyCredentialsProvider())
+                .setServiceUnavailableRetryStrategy(createServiceUnavailableRetryStrategy())
                 .build();
+    }
+
+    private static ServiceUnavailableRetryStrategy createServiceUnavailableRetryStrategy() {
+        return new ServiceUnavailableRetryStrategy() {
+            @Override
+            public boolean retryRequest(final HttpResponse response, final int executionCount, final HttpContext context) {
+                int statusCode = response.getStatusLine().getStatusCode();
+                return (statusCode == HttpStatus.SC_SERVICE_UNAVAILABLE || statusCode == HttpStatus.SC_GATEWAY_TIMEOUT) && executionCount < 3;
+            }
+
+            @Override
+            public long getRetryInterval() {
+                return 5000;
+            }
+        };
     }
 
     private static HttpRoutePlanner createProxyRoutePlanner() {
